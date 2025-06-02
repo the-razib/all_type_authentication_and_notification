@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "894261280685",
+    "project_id": "auth-and-notification",
+    "storage_bucket": "auth-and-notification.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894261280685:android:00ec11bf10e78ab6bfeb24",
+        "android_client_info": {
+          "package_name": "com.example.authentication_and_notification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr8sJONDZ5-jKqvtthlpX1-JBQiDBDfG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
