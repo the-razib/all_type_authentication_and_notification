@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
@@ -24,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
   }
 
+  // Sign in with email and password
   Future<void> _signInWithEmail() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -44,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // Sign in with Google
   Future<void> _signInWithGoogle() async {
     setState(() => _isLoading = true);
 
@@ -105,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Email',
                     prefixIcon: Icons.email,
                     keyboardType: TextInputType.emailAddress,
-                    validator: Utils.validateEmail,
+                    validator: FormValidators.validateEmail,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
@@ -113,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Password',
                     prefixIcon: Icons.lock,
                     obscureText: true,
-                    validator: Utils.validatePassword,
+                    validator: FormValidators.validatePassword,
                   ),
                   const SizedBox(height: 20),
                   CustomButton(

@@ -109,7 +109,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       hintText: 'Email',
                       prefixIcon: Icons.email,
                       keyboardType: TextInputType.emailAddress,
-                      validator: Utils.validateEmail,
+                      validator: FormValidators.validateEmail,
                     ),
                   ),
                   const SizedBox(height: 20),

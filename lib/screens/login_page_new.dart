@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Email',
                     prefixIcon: Icons.email,
                     keyboardType: TextInputType.emailAddress,
-                    validator: Utils.validateEmail,
+                    validator: FormValidators.validateEmail,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Password',
                     prefixIcon: Icons.lock,
                     obscureText: true,
-                    validator: Utils.validatePassword,
+                    validator: FormValidators.validatePassword,
                   ),
                   const SizedBox(height: 20),
                   CustomButton(
