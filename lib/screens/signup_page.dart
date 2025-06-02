@@ -1,6 +1,7 @@
 import 'package:authentication_and_notification/screens/login_page.dart';
 import 'package:authentication_and_notification/services/auth_service.dart';
 import 'package:authentication_and_notification/widgets/common_widgets.dart';
+import 'package:authentication_and_notification/widgets/common/facebook_login_button.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -35,6 +36,24 @@ class _SignUpPageState extends State<SignUpPage> {
         context,
         'Account created successfully! Please sign in.',
       );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
+    } else if (context.mounted) {
+      Utils.showSnackBar(context, result.errorMessage!, isError: true);
+    }
+  }
+
+  // Sign in with Facebook (for signup)
+  Future<void> _signUpWithFacebook() async {
+    setState(() => _isLoading = true);
+
+    final result = await AuthService.signInWithFacebook();
+
+    setState(() => _isLoading = false);
+
+    if (result.success && context.mounted) {
+      Utils.showSnackBar(context, 'Account created successfully!');
       Navigator.of(
         context,
       ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
@@ -114,15 +133,32 @@ class _SignUpPageState extends State<SignUpPage> {
                     hintText: 'Confirm Password',
                     prefixIcon: Icons.lock_outline,
                     obscureText: true,
-                    validator: (value) => FormValidators.validateConfirmPassword(
-                      value,
-                      _passwordController.text,
-                    ),
+                    validator: (value) =>
+                        FormValidators.validateConfirmPassword(
+                          value,
+                          _passwordController.text,
+                        ),
                   ),
                   const SizedBox(height: 20),
                   CustomButton(
                     text: 'Sign Up',
                     onPressed: _signUp,
+                    isLoading: _isLoading,
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: const [
+                      Expanded(child: Divider(thickness: 1)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('or'),
+                      ),
+                      Expanded(child: Divider(thickness: 1)),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  FacebookLoginButton(
+                    onPressed: _signUpWithFacebook,
                     isLoading: _isLoading,
                   ),
                   const SizedBox(height: 28),

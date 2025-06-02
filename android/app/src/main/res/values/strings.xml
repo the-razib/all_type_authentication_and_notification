@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Authentication And Notification</string>
+    
+    <!-- Facebook Configuration -->
+    <!-- TODO: Replace with your actual Facebook App ID from Facebook Developer Console -->
+    <string name="facebook_app_id">YOUR_FACEBOOK_APP_ID</string>
+    <!-- TODO: Replace with your actual Facebook Client Token from Facebook Developer Console -->
+    <string name="facebook_client_token">YOUR_FACEBOOK_CLIENT_TOKEN</string>
+    <!-- TODO: Replace YOUR_FACEBOOK_APP_ID with your actual Facebook App ID -->
+    <string name="fb_login_protocol_scheme">fbYOUR_FACEBOOK_APP_ID</string>
+</resources>

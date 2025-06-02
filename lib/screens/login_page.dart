@@ -3,6 +3,7 @@ import 'package:authentication_and_notification/screens/home_page.dart';
 import 'package:authentication_and_notification/screens/signup_page.dart';
 import 'package:authentication_and_notification/services/auth_service.dart';
 import 'package:authentication_and_notification/widgets/common_widgets.dart';
+import 'package:authentication_and_notification/widgets/common/facebook_login_button.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -51,6 +52,22 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _isLoading = true);
 
     final result = await AuthService.signInWithGoogle();
+
+    setState(() => _isLoading = false);
+
+    if (result.success && context.mounted) {
+      Utils.showSnackBar(context, 'Login successful!');
+      _navigateToHome(context);
+    } else if (context.mounted) {
+      Utils.showSnackBar(context, result.errorMessage!, isError: true);
+    }
+  }
+
+  // Sign in with Facebook
+  Future<void> _signInWithFacebook() async {
+    setState(() => _isLoading = true);
+
+    final result = await AuthService.signInWithFacebook();
 
     setState(() => _isLoading = false);
 
@@ -141,6 +158,11 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: _signInWithGoogle,
                     isLoading: _isLoading,
                     isOutlined: true,
+                  ),
+                  const SizedBox(height: 12),
+                  FacebookLoginButton(
+                    onPressed: _signInWithFacebook,
+                    isLoading: _isLoading,
                   ),
                   const SizedBox(height: 28),
                   TextButton(

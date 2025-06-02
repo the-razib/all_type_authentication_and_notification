@@ -1,5 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:authentication_and_notification/services/facebook_sign_in.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -80,9 +81,30 @@ class AuthService {
     }
   }
 
+  // Facebook Sign In
+  static Future<AuthResult> signInWithFacebook() async {
+    try {
+      final credential = await FacebookSignInService.signInWithFacebook();
+      if (credential != null) {
+        return AuthResult(success: true, user: credential.user);
+      } else {
+        return AuthResult(success: false, errorMessage: 'Facebook login cancelled or failed');
+      }
+    } catch (e) {
+      return AuthResult(
+        success: false,
+        errorMessage: 'Facebook authentication failed. Please try again.',
+      );
+    }
+  }
+
   // Sign Out
   static Future<void> signOut() async {
-    await Future.wait([_auth.signOut(), _googleSignIn.signOut()]);
+    await Future.wait([
+      _auth.signOut(), 
+      _googleSignIn.signOut(),
+      FacebookSignInService.signOut(),
+    ]);
   }
 
   // Send Password Reset Email
