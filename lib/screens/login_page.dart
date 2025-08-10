@@ -2,6 +2,7 @@ import 'package:authentication_and_notification/screens/forgot_password_page.dar
 import 'package:authentication_and_notification/screens/home_page.dart';
 import 'package:authentication_and_notification/screens/signup_page.dart';
 import 'package:authentication_and_notification/services/auth_service.dart';
+import 'package:authentication_and_notification/services/notification_service.dart';
 import 'package:authentication_and_notification/widgets/common_widgets.dart';
 import 'package:authentication_and_notification/widgets/common/facebook_login_button.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,68 @@ class _LoginPageState extends State<LoginPage> {
       _navigateToHome(context);
     } else if (context.mounted) {
       Utils.showSnackBar(context, result.errorMessage!, isError: true);
+    }
+  }
+
+  // Demo notification method
+  Future<void> _sendTestNotification() async {
+    try {
+      await NotificationService().sendTestNotification();
+      if (mounted) {
+        Utils.showSnackBar(context, 'Test notification sent!');
+      }
+    } catch (e) {
+      if (mounted) {
+        Utils.showSnackBar(
+          context,
+          'Failed to send notification: $e',
+          isError: true,
+        );
+      }
+    }
+  }
+
+  // Demo notification with image method
+  Future<void> _sendTestNotificationWithImage() async {
+    try {
+      await NotificationService().sendTestNotificationWithImage();
+      if (mounted) {
+        Utils.showSnackBar(context, 'Test notification with image sent!');
+      }
+    } catch (e) {
+      if (mounted) {
+        Utils.showSnackBar(
+          context,
+          'Failed to send notification: $e',
+          isError: true,
+        );
+      }
+    }
+  }
+
+  // Get FCM token for demo
+  Future<void> _showFCMToken() async {
+    try {
+      final token = await NotificationService().getToken();
+      if (mounted && token != null) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('FCM Token'),
+            content: SelectableText(token),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Utils.showSnackBar(context, 'Failed to get token: $e', isError: true);
+      }
     }
   }
 
@@ -200,6 +263,76 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 16),
+                  // Demo notification section
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.blue[200]!),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Push Notification Demo',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue[700],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _sendTestNotification,
+                                icon: const Icon(Icons.notifications, size: 18),
+                                label: const Text('Test Notification'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _showFCMToken,
+                                icon: const Icon(Icons.token, size: 18),
+                                label: const Text('Show Token'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: _sendTestNotificationWithImage,
+                            icon: const Icon(Icons.image, size: 18),
+                            label: const Text('Test with Image'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purple,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                 ],

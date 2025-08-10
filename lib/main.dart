@@ -2,6 +2,7 @@ import 'package:authentication_and_notification/config/constants.dart';
 import 'package:authentication_and_notification/config/router.dart';
 import 'package:authentication_and_notification/config/theme.dart';
 import 'package:authentication_and_notification/firebase_options.dart';
+import 'package:authentication_and_notification/services/notification_service.dart';
 import 'package:authentication_and_notification/widgets/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,12 @@ void main() async {
     );
     if (kDebugMode) {
       print('Firebase connected!');
+    }
+
+    // Initialize notification service
+    await NotificationService().initialize();
+    if (kDebugMode) {
+      print('Notification service initialized!');
     }
   } catch (e) {
     if (kDebugMode) {

@@ -1,6 +1,7 @@
 import 'package:authentication_and_notification/screens/login_page.dart';
 import 'package:authentication_and_notification/screens/profile_page.dart';
 import 'package:authentication_and_notification/services/auth_service.dart';
+import 'package:authentication_and_notification/services/notification_service.dart';
 import 'package:authentication_and_notification/widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,44 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _fcmToken;
+
+  @override
+  void initState() {
+    super.initState();
+    _getFCMToken();
+  }
+
+  Future<void> _getFCMToken() async {
+    try {
+      final token = await NotificationService().getToken();
+      if (mounted) {
+        setState(() {
+          _fcmToken = token;
+        });
+      }
+    } catch (e) {
+      print('Error getting FCM token: $e');
+    }
+  }
+
+  Future<void> _sendTestNotification() async {
+    try {
+      await NotificationService().sendTestNotification();
+      if (mounted) {
+        Utils.showSnackBar(context, 'Test notification sent!');
+      }
+    } catch (e) {
+      if (mounted) {
+        Utils.showSnackBar(
+          context,
+          'Failed to send notification: $e',
+          isError: true,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -218,6 +257,35 @@ class _HomePageState extends State<HomePage> {
                       Icons.login,
                       'Last Sign In',
                       _formatDateTime(user.metadata.lastSignInTime),
+                    ),
+                  ]),
+
+                  const SizedBox(height: 20),
+
+                  // Push Notification Section
+                  _buildSectionTitle('Push Notifications'),
+                  _buildInfoCard([
+                    _buildInfoRow(
+                      Icons.notifications,
+                      'FCM Token',
+                      _fcmToken,
+                      isToken: true,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: _sendTestNotification,
+                          icon: const Icon(Icons.send),
+                          label: const Text('Send Test Notification'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.deepPurple,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                        ),
+                      ),
                     ),
                   ]),
 
